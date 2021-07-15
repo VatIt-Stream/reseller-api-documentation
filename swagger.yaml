@@ -14,7 +14,7 @@ info:
 servers:
   # Added by API Auto Mocking Plugin
   - description: Stream Reseller API
-    url: http://localhost:4000/reseller_api/v1/
+    url: https://stream-orders-api-sandbox.herokuapp.com/reseller_api/v1/
 
 tags:
   - name: address
@@ -1038,7 +1038,7 @@ components:
         description: This API uses OAuth 2 with the client credentials flow.
         flows:
           clientCredentials:
-            tokenUrl: http://localhost:4000/oauth/token
+            tokenUrl: https://stream-orders-api-sandbox.herokuapp.com/oauth/token
             scopes:
               public: Public scope
 
