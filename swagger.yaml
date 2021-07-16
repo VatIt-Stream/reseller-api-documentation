@@ -19,10 +19,10 @@ servers:
 tags:
   - name: address
     description: Addresses are stored separately to entities such as companies. Each company has an address.
-  - name: company
-    description: The businesses that will have access to the Stream interface. A company can have many users.
   - name: billing_group
     description: The billing group you choose determines the bank account and business entity that you will collect payments into (receivable billing company) as well as our business entity that you will make payments to. These can be configured via the Reseller portal
+  - name: company
+    description: The businesses that will have access to the Stream interface. A company can have many users.
   - name: user
     description: A company user
 
@@ -40,7 +40,7 @@ paths:
           required: true
           schema:
             type: integer
-            example: 182735
+            example: 123456
       requestBody:
         $ref: '#/components/requestBodies/Address'
       responses:
@@ -56,7 +56,7 @@ paths:
                 allOf:
                   - $ref: '#/components/responses/CompanyNotFound'
         '422':
-          description: Unprocessible Entity
+          $ref: '#/components/responses/UnprocessableEntity'
 
   /billing_groups:
     get:
@@ -73,7 +73,7 @@ paths:
     get:
       tags:
         - company
-      summary: Retrieve all companies
+      summary: Retrieve all companies created by your partner account.
       responses:
         '200':
           $ref: '#/components/responses/GetCompanies'
@@ -92,12 +92,8 @@ paths:
           $ref: '#/components/responses/CreateCompany'
         '401':
           $ref: '#/components/responses/UnauthorizedAccess'
-
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
-
-        '500':
-          description: Internal Server Error
 
   /companies/{id}:
     get:
@@ -109,10 +105,9 @@ paths:
           in: path
           description: id of an existing company
           required: true
-          explode: true
           schema:
-            type: string
-            example: "807"
+            type: integer
+            example: 123
       responses:
         '200':
           $ref: '#/components/responses/GetCompany'
@@ -132,8 +127,8 @@ paths:
           required: true
           explode: true
           schema:
-            type: string
-            example: "0"
+            type: integer
+            example: 123
       requestBody:
         $ref: '#/components/requestBodies/Company'
       responses:
@@ -167,8 +162,7 @@ paths:
               schema:
                 properties:
                   api_user:
-                    type: object
-                    $ref: '#/components/schemas/ApiUser'
+                    $ref: '#/components/requestBodies/ApiUser'
 
       responses:
         '201':
@@ -188,10 +182,9 @@ paths:
           in: path
           description: id of an existing user
           required: true
-          explode: true
           schema:
-            type: string
-            example: "1"
+            type: integer
+            example: 123
         responses:
           '200':
             $ref: '#/components/responses/GetApiUser'
@@ -217,8 +210,7 @@ paths:
             schema:
               properties:
                 api_user:
-                  type: object
-                  $ref: '#/components/schemas/ApiUser'
+                  $ref: '#/components/requestBodies/ApiUser'
 
 
       responses:
@@ -260,10 +252,9 @@ paths:
           in: path
           description: id of an existing company
           required: true
-          explode: true
           schema:
-            type: string
-            example: "1984"
+            type: integer
+            example: 1234
       responses:
         '200':
           $ref: '#/components/responses/GetApiUsers'
@@ -283,10 +274,9 @@ paths:
           in: path
           description: id of an existing reseller
           required: true
-          explode: true
           schema:
-            type: string
-            example: "1984"
+            type: integer
+            example: 1234
       responses:
         '200':
           $ref: '#/components/responses/GetApiUsers'
@@ -296,10 +286,8 @@ paths:
 components:
   schemas:
 
-    ApiUser:
+    ApiUserRequest:
       type: object
-      required:
-        - api_user
       properties:
         email:
           type: string
@@ -309,110 +297,118 @@ components:
           example: "123456"
         company_id:
           type: integer
-          example: 807
+          example: 123
         admin:
           type: boolean
           example: false
 
-    ApiUserResponseBody:
+    ApiUserResponse:
         type: object
         properties:
-          api_user:
+          id:
+            type: integer
+            example: 1234
+          email:
+            type: string
+            example: "test@company.com"
+          admin:
+            type: boolean
+            example: false
+          company_id:
+            type: integer
+            example: 1234
+          company_name:
+            type: string
+            example: "Test Company PTY Ltd"
+          role:
+            type: string
+            example: "client"
+          contact_number:
+            type: string
+            example: "123-456-7890"
+          first_name:
+            type: string
+            example: "Joe"
+          last_name:
+            type: string
+            example: "Soap"
+          whats_new_viewed_datetime:
+            type: string
+            example: "2020-01-01T00:00:00.000Z"
+          company_currency_id:
+            type: string
+            example: "USD"
+          deactivated:
+            type: boolean
+            example: false
+          reseller:
             type: object
             properties:
               id:
                 type: integer
-                example: 2281
-              email:
+                example: 2
+              name:
                 type: string
-              admin:
-                type: boolean
-              company_id:
-                type: integer
-              company_name:
-                type: string
-              role:
-                type: string
-              contact_number:
-                type: string
-              first_name:
-                type: string
-              last_name:
-                type: string
-              whats_new_viewed_datetime:
-                type: string
-                example: "2020-01-01T00:00:00.000Z"
-              company_currency_id:
-                type: string
-              deactivated:
-                type: boolean
-                example: false
-              reseller:
+                example: "Reseller PTY Ltd"
+              website_configuration:
                 type: object
                 properties:
-                  id:
-                    type: integer
-                    example: 2
-                  name:
+                  primary_colors:
                     type: string
-                  website_configuration:
-                    type: object
-                    properties:
-                      primary_colors:
-                        type: string
-                  base_markup:
-                    type: number
-                    example: 0.0
-                  billing_company_id:
-                    type: integer
-                    example: 5
-                  own_billing_company_id:
-                    type: integer
-                    example: 6
-                  ui_url:
-                    type: string
-                    example: https://testship.company.com/
-                  processing_fee_percentage:
-                    type: number
-                    example: 0.0
-                  profit_sharing_percentage:
-                    type: number
-                    example: 0.4
-                  sender_email:
-                    type: string
-                    example: "reply@testship.com"
-                  no_reply_email:
-                    type: string
-                    example:  "no_reply@testship.com"
-                  email_sender_name:
-                    type: string
-                    example: "Test Update"
-                  account_status:
-                    type: string
-                    example: "active_account"
-                  internal_name:
-                    type: string
-                    example: "Internal Company Name"
-                  invoice_email:
-                    type: string
-                    example: "invoices@testship.com"
-                  currency_id:
-                    type: string
-                    example: "ZAR"
-                  reseller_estimate_calculation:
-                    type: string
-                    example: calculate_off_cost_price_estimate
-                  billing_config:
-                    type: string
-                    example: "reseller_billing"
-                  flat_commission_percentage:
-                    type: number
-                    example: 0.0
-                  minimum_company_markup:
-                    type: number
-                    example: 1.4
-                  beta_ui_url:
-                    type: string
+                    example: "#000000"
+              base_markup:
+                type: number
+                example: 0.0
+              billing_company_id:
+                type: integer
+                example: 1
+              own_billing_company_id:
+                type: integer
+                example: 2
+              ui_url:
+                type: string
+                example: https://testship.company.com/
+              processing_fee_percentage:
+                type: number
+                example: 0.0
+              profit_sharing_percentage:
+                type: number
+                example: 0.0
+              sender_email:
+                type: string
+                example: "reply@company.com"
+              no_reply_email:
+                type: string
+                example:  "no_reply@company.com"
+              email_sender_name:
+                type: string
+                example: "Joe Soap"
+              account_status:
+                type: string
+                example: "active_account"
+              internal_name:
+                type: string
+                example: "Internal Test Company Name"
+              invoice_email:
+                type: string
+                example: "invoices@company.com"
+              currency_id:
+                type: string
+                example: "USD"
+              reseller_estimate_calculation:
+                type: string
+                example: "calculate_off_cost_price_estimate"
+              billing_config:
+                type: string
+                example: "reseller_billing"
+              flat_commission_percentage:
+                type: number
+                example: 0.0
+              minimum_company_markup:
+                type: number
+                example: 0.0
+              beta_ui_url:
+                type: string
 
     Address:
       type: object
@@ -431,7 +427,7 @@ components:
           example: "Province"
         postal_code:
           type: string
-          example: "1956"
+          example: "0000"
         country_code:
           type: string
           example: "ZA"
@@ -441,18 +437,25 @@ components:
       properties:
         id:
           type: integer
+          example: 123
         name:
           type: string
+          example: "Test Company PTY Ltd"
         reseller_id:
           type: integer
+          example: 123
         currency_id:
           type: string
+          example: "USD"
         reseller_receivable_billing_company_id:
           type: integer
+          example: 1
         reseller_payable_billing_company_id:
           type: integer
+          example: 2
         receivable_billing_company_id:
           type: integer
+          example: 3
         reseller_receivable_billing_company:
           $ref: '#/components/schemas/ResellerReceivableBillingCompany'
         reseller_payable_billing_company:
@@ -471,303 +474,443 @@ components:
       properties:
         id:
           type: integer
+          example: 123
         name:
           type: string
-          example: ExampleName
+          example: "Test Company PTY Ltd"
         internal_name:
           type: string
+          example: "Internal Test Company Name"
         registration_number:
           type: string
+          example: "ZA2021/100000/01"
         vat_number:
           type: string
+          example: " - "
         address_1:
           type: string
+          example: "Address line 1"
         address_2:
           type: string
+          example: "Address line 2"
         country:
           type: string
+          example: "South Africa"
         number:
           type: string
+          example: "+271233456789"
         email:
           type: string
+          example: "test@company.com"
         invoice_note:
           type: string
         billing_detail_currency:
           type: string
+          example: "ZAR"
         bank_detail_id:
           type: integer
+          example: 1
         xero_account_id:
           type: integer
+          example: 2
         xero_contactable:
           type: boolean
+          example: true
+        reseller_id:
+          type: integer
+          example: 123
 
     ResellerPayableBillingCompany:
       type: object
       properties:
         id:
           type: integer
+          example: 123
         name:
           type: string
+          example: "Test Company PTY Ltd"
         internal_name:
           type: string
+          example: "Internal Test Company Name"
         registration_number:
           type: string
+          example: "ZA2021/100000/01"
         vat_number:
           type: string
+          example: " - "
         address_1:
           type: string
+          example: "Address line 1"
         address_2:
           type: string
+          example: "Address line 2"
         country:
           type: string
+          example: "South Africa"
         number:
           type: string
+          example: "+271233456789"
         email:
           type: string
+          example: "test@company.com"
         invoice_note:
           type: string
         billing_detail_currency:
           type: string
+          example: "ZAR"
         bank_detail_id:
           type: integer
+          example: 1
         xero_account_id:
           type: integer
+          example: 2
         xero_contactable:
           type: boolean
+          example: true
+        reseller_id:
+          type: integer
+          example: 123
 
-    MarkupConfig:
+    MarkupConfigRequest:
       type: object
       properties:
         markup_percentage:
           type: number
-          example: 1.01
+          example: 0.00
 
-    Company:
+    MarkupConfigResponse:
       type: object
       properties:
-            id:
-              type: integer
-              format: int64
-            name:
-              type: string
-              example: Netflix PTY Ltd
-            currency_id:
-              type: string
-              example: "USD"
-            contact_name:
-              type: string
-              example: "Joe Soap"
-            contact_number:
-              type: string
-              example: "11111111"
-            contact_email:
-              type: string
-              example: "joesoap@netflix.com"
-            invoice_due_days:
-              type: integer
-              example: 7
-            address:
-              $ref: '#/components/schemas/Address'
-            incoterms:
-              type: array
-              description: An array of incoterms
-              items:
-                type: string
-                example: "DDP"
-            api_users:
-              type: array
-              items:
-                $ref: '#/components/schemas/ApiUser'
-            markup_config:
-              $ref: '#/components/schemas/MarkupConfig'
+        id:
+          type: integer
+          example: 123
+        company_id:
+          type: integer
+          example: 123
+        markup_percentage:
+          type: number
+          example: 0.00
+        created_at:
+            type: string
+            example: '2021-06-29T10:54:03.789Z'
+        updated_at:
+            type: string
+            example: '2021-06-29T10:54:03.789Z'
 
-    CompanyResponseBody:
+    CompanyRequest:
       type: object
       properties:
+        id:
+          type: integer
+          example: 123
+        name:
+          type: string
+          example: "Test Company PTY Ltd"
+        currency_id:
+          type: string
+          example: "USD"
+        contact_name:
+          type: string
+          example: "Joe Soap"
+        contact_number:
+          type: string
+          example: "+1123456789"
+        contact_email:
+          type: string
+          example: "joesoap@company.com"
+        invoice_due_days:
+          type: integer
+          example: 1
+        address:
+          $ref: '#/components/schemas/Address'
+        incoterms:
+          type: array
+          description: An array of incoterms
+          items:
+            type: string
+            example: "DDP"
+        api_users:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiUserRequest'
+        markup_config:
+          $ref: '#/components/schemas/MarkupConfigRequest'
+
+    CompanyResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        name:
+          type: string
+          example: "Test Company PTY Ltd"
+        code:
+          type: string
+          example: "TESTCO001"
+        automate_waybill:
+          type: boolean
+          example: true
+        automate_pickup:
+          type: boolean
+          example: true
+        contact_name:
+          type: string
+          example: "Joe Soap"
+        contact_number:
+          type: string
+          example: "+1123456789"
+        vat_number:
+          type: string
+          example: " - "
+        account_number:
+          type: string
+          example: "TESTCO001"
+        email:
+          type: string
+          example: "test@company.com"
+        ccd_required:
+          type: boolean
+          example: true
+        payment_terms:
+          type: integer
+          example: 7
+        currency_id:
+          type: string
+          example: "USD"
+        waybill_cc_email:
+          type: string
+          example: "test@company.com"
+        invoice_cc_email:
+          type: string
+          example: "test@company.com"
+        reseller_chat_recipients_override:
+          type: string
+          example: null
+        customs_clearance_document_cc_email:
+          type: string
+          example: null
+        address_id:
+          type: integer
+          example: 123456
+        currency_code:
+          type: string
+          example: "USD"
+        country_id:
+          type: integer
+          example: 235
+        part_of_vat_group:
+          type: boolean
+          example: false
+        estimate_presentation_configuration_id:
+          type: integer
+          example: 1
+        purpose_of_shipment_ids:
+          type: array
+          items:
+            type: integer
+            example: 8
+        sales_person_id:
+          type: integer
+          example: 0
+        account_manager_id:
+          type: integer
+          example: 0
+        client_agreement_document_link:
+          type: string
+          example: ' '
+        credit_application_link:
+          type: string
+          example: ' '
+        credit_limit:
+          type: integer
+          example: 0
+        credit_limit_currency_id:
+          type: string
+          example: "USD"
+        credit_used:
+          type: integer
+          example: 0
+        account_status:
+          type: string
+          example: "account_active"
+        manual_quote_cc_email:
+          type: string
+          example: "test@company.com"
+        allow_auto_billing:
+          type: boolean
+          example: false
+        shipping_company_ids:
+          type: array
+          items:
+            type: integer
+            example: 0
+        quoteable_shipping_company_ids:
+          type: array
+          items:
+            type: integer
+            example: 0
+        allow_client_waybill_generation:
+          type: boolean
+          example: true
+        billing_group_id:
+          type: integer
+          example: 123
+        quote_setup:
+          type: object
+          properties:
             id:
               type: integer
-              format: int64
-            name:
-              type: string
-              example: Testflix PTY Ltd
-            code:
-              type: string
-              example: "RESTES001"
-            automation_waybill:
+              example: 123
+            can_packages_be_stacked_display:
               type: boolean
-            automate_pickup:
+              example: true
+            can_packages_be_stacked_value:
               type: boolean
-            contact_name:
-              type: string
-              example: "Joe Soap"
-            contact_number:
-              type: string
-              example: "11111111"
-            vat_number:
-              type: string
-              example: "null"
-            account_number:
-              type: string
-              example: "RESTES001"
-            email:
-              type: string
-              example: "test@test.com"
-            ccd_required:
+              example: true
+            company_id:
+              type: integer
+              example: 123
+            shipment_protection_display:
               type: boolean
-            payment_terms:
-              type: integer
-              example: 7
-            billing_company_id:
-              type: integer
-              example: 5
-            pay_to_billing_company_id:
-              type: integer
-              example: 5
-            currency_id:
-              type: string
-              example: "USD"
-            waybill_cc_email:
-              type: string
-            invoice_cc_email:
-              type: string
-            reseller_chat_recipients_override:
-              type: string
-            customs_clearance_document_cc_email:
-              type: string
-            address_id:
-              type: integer
-              example: 188149
-            currency_code:
-              type: string
-              example: "USD"
-            country_id:
-              type: integer
-              example: 205
-            part_of_vat_group:
+              example: true
+            shipment_protection_value:
+              type: boolean
+              example: true
+            dangerous_goods_verified:
               type: boolean
               example: false
-            estimate_presentation_configuration_id:
-              type: integer
-              example: 2
-            purpose_of_shipment_ids:
+            accepted_dangerous_good_ids:
               type: array
               items:
                 type: integer
-                example: 8
-            sales_persons_id:
-              type: integer
-              example: 8
-            account_manager_id:
-              type: integer
-              example: 2
-            client_agreement_document_link:
-              type: string
-            credit_application_link:
-              type: string
-            credit_limit:
-              type: number
-              example: 0.0
-            credit_limit_currency_id:
-              type: string
-              example: "USD"
-            credit_used:
-              type: number
-              example: 0.0
-            account_status:
-              type: string
-              example: "active_account"
-            manual_quote_cc_email:
-              type: string
-              example: 'manual@testflix.com'
-            allow_auto_billing:
+                example: 1
+            allowed_quote_types:
+              type: array
+              items:
+                type: string
+                enum:
+                  - international
+                  - domestic
+                  - ocean
+            can_customize_ior:
               type: boolean
-            shipping_company_ids:
-              type: array
-              items:
-                type: integer
-                example: 19999
-            quoteable_shipping_company_ids:
-              type: array
-              items:
-                type: integer
-                example: 5,
-            allow_client_waybill_generation:
+              example: false
+            can_appoint_ior:
               type: boolean
-            quote_setup:
+              example: false
+            is_document_value:
+              type: boolean
+              example: false
+            require_hs_codes_for_ddp:
+              type: boolean
+              example: true
+            estimate_taxes_and_duties_display:
+              type: boolean
+              example: true
+            commercial_transaction_of_goods_display:
+              type: boolean
+              example: true
+            commercial_transaction_of_goods_value:
+              type: boolean
+              example: false
+        reseller_company:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 123
+            reseller_id:
+              type: integer
+              example: 123
+            company_id:
+              type: integer
+              example: 123
+            created_at:
+              type: string
+              example: '2021-06-29T10:54:03.789Z'
+            updated_at:
+              type: string
+              example: '2021-06-29T10:54:03.789Z'
+            billing_group:
               type: object
               properties:
                 id:
+                  type: integer
+                  example: 123
+                name:
+                  type: string
+                  example: "Test Company PTY Ltd"
+                reseller_id:
+                  type: integer
+                  example: 123
+                currency_id:
+                  type: string
+                  example: "USD"
+                reseller_receivable_billing_company_id:
+                  type: integer
+                  example: 1
+                reseller_payable_billing_company_id:
                   type: integer
                   example: 2
-                can_packages_be_stacked_display:
-                  type: boolean
-                can_packages_be_stacked_value:
-                  type: boolean
-                company_id:
+                receivable_billing_company_id:
                   type: integer
-                shipment_protection_display:
-                  type: boolean
-                shipment_protection_value:
-                  type: boolean
-                dangerous_goods_verified:
-                  type: boolean
-                accepted_dangerous_good_is:
-                  type: array
-                  items:
-                    type: integer
-                allowed_quote_types:
-                  type: array
-                  items:
-                    type: string
-                    example: "international"
-                can_customize_ior:
-                  type: boolean
-                can_appoint_ior:
-                  type: boolean
-                is_document_value:
-                  type: boolean
-                require_hs_codes_for_ddp:
-                  type: boolean
-                estimate_taxes_and_duties_display:
-                  type: boolean
-                commercial_transaction_of_goods_display:
-                  type: boolean
-                commercial_transaction_of_goods_value:
-                  type: boolean
-            reseller_company:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1900
-                  reseller_id:
-                    type: integer
-                  company_id:
-                    type: integer
-                    example: 807
-                  created_at:
-                    type: string
-                    example: "2021-06-29T10:54:03.789Z"
-                  updated_at:
-                    type: string
-                    example: "2021-06-29T10:54:03.789Z"
-            markup_config:
-              type: object
-              properties:
-                id:
-                  type: integer
-                company_id:
-                  type: integer
-                  example: 807
-                markup_percentage:
-                  type: number
-                  example: 1.5
-                created_at:
-                  type: string
-                  example: "2021-06-29T10:54:03.789Z"
-                updated_at:
-                  type: string
-                  example: "2021-06-29T10:54:03.789Z"
+                  example: 3
+                reseller_receivable_billing_company:
+                    allOf:
+                      - $ref: '#/components/schemas/ResellerReceivableBillingCompany'
+                      - type: object
+                        properties:
+                          bank_detail:
+                            $ref: '#/components/schemas/BankDetail'
+                reseller_payable_billing_company:
+                    allOf:
+                      - $ref: '#/components/schemas/ResellerPayableBillingCompany'
+                      - type: object
+                        properties:
+                          bank_detail:
+                            $ref: '#/components/schemas/BankDetail'
+        markup_config:
+          $ref: '#/components/schemas/MarkupConfigResponse'
+
+    BankDetail:
+      properties:
+        id:
+          type: integer
+          example: 123
+        description_1:
+          type: string
+          example: "Company"
+        description_2:
+          type: string
+          example: "Bank"
+        description_3:
+          type: string
+          example: "Routing Number"
+        description_4:
+          type: string
+          example: "Accounting Number"
+        description_5:
+          type: string
+          example: " "
+        value_1:
+          type: string
+          example: "Test Company PTY Ltd"
+        value_2:
+          type: string
+          example: "Bank of Test"
+        value_3:
+          type: string
+          example: "1234567890"
+        value_4:
+          type: string
+          example: "123456879"
+        value_5:
+          type: string
+          example: " "
+        currency_id:
+          type: string
+          example: "USD"
 
     BaseError:
       type: object
@@ -891,7 +1034,7 @@ components:
           schema:
             properties:
               user:
-                $ref: '#/components/schemas/ApiUserResponseBody'
+                $ref: '#/components/schemas/ApiUserResponse'
 
     GetApiUsers:
       description: OK
@@ -902,7 +1045,7 @@ components:
               api_users:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ApiUserResponseBody'
+                  $ref: '#/components/schemas/ApiUserResponse'
 
     GetBillingGroups:
       description: OK
@@ -918,7 +1061,7 @@ components:
           schema:
             properties:
               company:
-                $ref: '#/components/schemas/CompanyResponseBody'
+                $ref: '#/components/schemas/CompanyResponse'
 
     GetCompanies:
       description: OK
@@ -929,7 +1072,7 @@ components:
               companies:
                 type: array
                 items:
-                  $ref: '#/components/schemas/CompanyResponseBody'
+                  $ref: '#/components/schemas/CompanyResponse'
 
     CreateCompany:
       description: Created
@@ -938,7 +1081,7 @@ components:
           schema:
               properties:
                 company:
-                  $ref: '#/components/schemas/CompanyResponseBody'
+                  $ref: '#/components/schemas/CompanyResponse'
 
     CreateApiUser:
       description: Created
@@ -946,7 +1089,7 @@ components:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/ApiUserResponseBody'
+              - $ref: '#/components/schemas/ApiUserResponse'
 
     DeleteApiUser:
       description: OK
@@ -1009,7 +1152,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ApiUser'
+            $ref: '#/components/schemas/ApiUserRequest'
       description: ApiUser Object
       required: true
 
@@ -1027,8 +1170,7 @@ components:
           schema:
             properties:
               company:
-                type: object
-                $ref: '#/components/schemas/Company'
+                $ref: '#/components/schemas/CompanyRequest'
       description: Company Object
       required: true
 
