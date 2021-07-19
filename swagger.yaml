@@ -20,7 +20,7 @@ tags:
   - name: address
     description: Addresses are stored separately to entities such as companies. Each company has an address.
   - name: billing_group
-    description: The billing group you choose determines the bank account and business entity that you will collect payments into (receivable billing company) as well as our business entity that you will make payments to. These can be configured via the Reseller portal. A Billing Group only needs to be set if the billing_config is set to "reseller_billing", otehrwise Stream will collect payment from the client on your behalf.
+    description: The billing group you choose determines the bank account and business entity that you will collect payments into (receivable billing company) as well as our business entity that you will make payments to. These can be configured via the Reseller portal. A Billing Group only needs to be set if you collect payments directly from customers. If Stream is collecting payments on your behalf then you should leave this field blank.
   - name: company
     description: The businesses that will have access to the Stream interface. A company can have many users.
   - name: user
