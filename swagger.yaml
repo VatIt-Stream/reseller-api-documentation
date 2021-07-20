@@ -142,16 +142,6 @@ paths:
           $ref: '#/components/responses/CompanyNotFound'
 
   /api_users:
-    get:
-      tags:
-        - user
-      summary: Retrieve all users
-      responses:
-        '200':
-          $ref: '#/components/responses/GetApiUsers'
-        '401':
-          $ref: '#/components/responses/UnauthorizedAccess'
-
     post:
       tags:
         - user
@@ -263,25 +253,6 @@ paths:
         '404':
           description: Coudn't find requested company
           $ref: '#/components/responses/CompanyNotFound'
-
-  /resellers/{id}/api_users:
-    get:
-      tags:
-        - user
-      summary: Retrieve users for a specific reseller
-      parameters:
-        - name: id
-          in: path
-          description: id of an existing reseller
-          required: true
-          schema:
-            type: integer
-            example: 1234
-      responses:
-        '200':
-          $ref: '#/components/responses/GetApiUsers'
-        '401':
-          $ref: '#/components/responses/UnauthorizedAccess'
 
 components:
   schemas:
