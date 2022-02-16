@@ -4,17 +4,19 @@ info:
   description: "This API provides basic accessibility to some of Stream's system. The documentation below outlines the authentication process as well as various endpoints that you will have access to as a client of the API."
   version: "1.0.0"
   title: Stream Partner API
-  termsOfService: 'https://vatit-stream.com/terms_and_conditions'
+  termsOfService: "https://vatit-stream.com/terms_and_conditions"
   contact:
     email: developers@vatitstream.com
   license:
     name: Apache 2.0
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 
 servers:
   # Added by API Auto Mocking Plugin
   - description: Stream Reseller API
     url: https://stream-orders-api-sandbox.herokuapp.com/reseller_api/v1/
+  - description: Localhost
+    url: http://localhost:4000/reseller_api/v1/
 
 tags:
   - name: address
@@ -25,9 +27,12 @@ tags:
     description: The businesses that will have access to the Stream interface. A company can have many users.
   - name: user
     description: A company user
+  - name: static
+    description: Used to look up information.
+  - name: order
+    description: You can place and retrieve orders. To do this please ensure that you first create a quote as you will need the quote estimate id.
 
 paths:
-
   /addresses/{id}:
     patch:
       tags:
@@ -42,21 +47,21 @@ paths:
             type: integer
             example: 123456
       requestBody:
-        $ref: '#/components/requestBodies/Address'
+        $ref: "#/components/requestBodies/Address"
       responses:
-        '201':
-          $ref: '#/components/responses/GetAddress'
-        '401':
-          $ref: '#/components/responses/UnauthorizedAccess'
-        '404':
+        "201":
+          $ref: "#/components/responses/GetAddress"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAccess"
+        "404":
           description: Resource Not Found
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/responses/CompanyNotFound'
-        '422':
-          $ref: '#/components/responses/UnprocessableEntity'
+                  - $ref: "#/components/responses/CompanyNotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
 
   /billing_groups:
     get:
@@ -64,10 +69,10 @@ paths:
         - billing_group
       summary: Retrieve all billing groups for your partner account
       responses:
-        '200':
-          $ref: '#/components/responses/GetBillingGroups'
-        '401':
-          $ref: '#/components/responses/UnauthorizedAccess'
+        "200":
+          $ref: "#/components/responses/GetBillingGroups"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAccess"
 
   /companies:
     get:
@@ -75,10 +80,10 @@ paths:
         - company
       summary: Retrieve all companies created by your partner account.
       responses:
-        '200':
-          $ref: '#/components/responses/GetCompanies'
-        '401':
-          $ref: '#/components/responses/UnauthorizedAccess'
+        "200":
+          $ref: "#/components/responses/GetCompanies"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAccess"
 
   /company_setups:
     post:
@@ -86,14 +91,14 @@ paths:
         - company
       summary: Add a new company
       requestBody:
-        $ref: '#/components/requestBodies/Company'
+        $ref: "#/components/requestBodies/Company"
       responses:
-        '201':
-          $ref: '#/components/responses/CreateCompany'
-        '401':
-          $ref: '#/components/responses/UnauthorizedAccess'
-        '422':
-          $ref: '#/components/responses/UnprocessableEntity'
+        "201":
+          $ref: "#/components/responses/CreateCompany"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAccess"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
 
   /companies/{id}:
     get:
@@ -109,12 +114,12 @@ paths:
             type: integer
             example: 123
       responses:
-        '200':
-          $ref: '#/components/responses/GetCompany'
-        '401':
-          $ref: '#/components/responses/UnauthorizedAccess'
-        '404':
-          $ref: '#/components/responses/CompanyNotFound'
+        "200":
+          $ref: "#/components/responses/GetCompany"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAccess"
+        "404":
+          $ref: "#/components/responses/CompanyNotFound"
 
     patch:
       tags:
@@ -130,16 +135,16 @@ paths:
             type: integer
             example: 123
       requestBody:
-        $ref: '#/components/requestBodies/Company'
+        $ref: "#/components/requestBodies/Company"
       responses:
-        '200':
-          $ref: '#/components/responses/CreateCompany'
-        '401':
-          $ref: '#/components/responses/UnauthorizedAccess'
-        '422':
-          $ref: '#/components/responses/UnprocessableEntity'
-        '404':
-          $ref: '#/components/responses/CompanyNotFound'
+        "200":
+          $ref: "#/components/responses/CreateCompany"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAccess"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+        "404":
+          $ref: "#/components/responses/CompanyNotFound"
 
   /api_users:
     post:
@@ -148,26 +153,26 @@ paths:
       summary: Create a new user account
       requestBody:
         content:
-            application/json:
-              schema:
-                properties:
-                  api_user:
-                    $ref: '#/components/requestBodies/ApiUser'
+          application/json:
+            schema:
+              properties:
+                api_user:
+                  $ref: "#/components/requestBodies/ApiUser"
 
       responses:
-        '201':
-          $ref: '#/components/responses/CreateApiUser'
-        '401':
-          $ref: '#/components/responses/UnauthorizedAccess'
-        '422':
-          $ref: '#/components/responses/UnprocessableEntity'
+        "201":
+          $ref: "#/components/responses/CreateApiUser"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAccess"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
 
   /api_users/{id}:
     get:
-        tags:
-          - user
-        summary: Retrieve the current users details
-        parameters:
+      tags:
+        - user
+      summary: Retrieve the current users details
+      parameters:
         - name: id
           in: path
           description: id of an existing user
@@ -175,11 +180,11 @@ paths:
           schema:
             type: integer
             example: 123
-        responses:
-          '200':
-            $ref: '#/components/responses/GetApiUser'
-          '401':
-            $ref: '#/components/responses/UnauthorizedAccess'
+      responses:
+        "200":
+          $ref: "#/components/responses/GetApiUser"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAccess"
 
     patch:
       tags:
@@ -200,16 +205,15 @@ paths:
             schema:
               properties:
                 api_user:
-                  $ref: '#/components/requestBodies/ApiUser'
-
+                  $ref: "#/components/requestBodies/ApiUser"
 
       responses:
-        '201':
-          $ref: '#/components/responses/CreateApiUser'
-        '401':
-          $ref: '#/components/responses/UnauthorizedAccess'
-        '404':
-          $ref: '#/components/responses/ApiUserNotFound'
+        "201":
+          $ref: "#/components/responses/CreateApiUser"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAccess"
+        "404":
+          $ref: "#/components/responses/ApiUserNotFound"
 
     delete:
       tags:
@@ -225,12 +229,12 @@ paths:
             type: string
             example: "0000"
       responses:
-        '200':
-          $ref: '#/components/responses/DeleteApiUser'
-        '401':
-          $ref: '#/components/responses/UnauthorizedAccess'
-        '404':
-          $ref: '#/components/responses/ApiUserNotFound'
+        "200":
+          $ref: "#/components/responses/DeleteApiUser"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAccess"
+        "404":
+          $ref: "#/components/responses/ApiUserNotFound"
 
   /companies/{id}/api_users:
     get:
@@ -246,16 +250,237 @@ paths:
             type: integer
             example: 1234
       responses:
-        '200':
-          $ref: '#/components/responses/GetApiUsers'
-        '401':
-          $ref: '#/components/responses/UnauthorizedAccess'
-        '404':
+        "200":
+          $ref: "#/components/responses/GetApiUsers"
+        "401":
+          $ref: "#/components/responses/UnauthorizedAccess"
+        "404":
           description: Coudn't find requested company
-          $ref: '#/components/responses/CompanyNotFound'
+          $ref: "#/components/responses/CompanyNotFound"
+
+  /countries:
+    get:
+      tags:
+        - static
+      summary: Countries
+      parameters:
+        - name: show_all
+          in: query
+          description: Select true not to paginate the results.
+          schema:
+            type: boolean
+            enum:
+              - true
+              - false
+      responses:
+        "200":
+          description: fetch all the 'country' items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  countries: 
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Country"
+
+  /currencies:
+    get:
+      summary: Currencies
+      tags:
+        - static
+      responses:
+        '200':
+          description: fetch all the 'currency' items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  currencies:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Currency'
+
+  /line_item_types:
+    get:
+      summary: Line Item Types
+      tags:
+        - static
+      responses:
+        '200':
+          description: fetch all the 'line item types' items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  line_item_types:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LineItemType'
+
+  /order_statuses:
+    get:
+      summary: Order statuses
+      tags:
+        - static
+      responses:
+        "200":
+          description: fetch all the different statuses an order may be in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order_statuses:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OrderStatus'
+
+  /purpose_of_shipments:
+    get:
+      summary: Purpose of Shipment (or IncoTerms)
+      tags:
+        - static
+      responses:
+        '200':
+          description: fetch all the 'purpose_of_shipment' items. Also known as the IncoTerms
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  purpose_of_shipments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PurposeOfShipment'
+
+  /system_configs/export_permit_origin_country_ids:
+    get:
+      summary: Export Permit Origin Country Ids
+      tags:
+        - static
+      responses:
+        '200':
+          description: This will fetch ids (as returned by the /countries endpoint) of all the countries that require an export permit. Export permits are required for orders leaving the specified countries before it is possible to generate waybill.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExportPermitOriginCountryId'
+
+  /orders:
+    post:
+      tags:
+        - order
+      summary: Order
+      operationId: createOrder
+      description: >
+        Creates an order on the stream system. If you will be uploading the files
+        such as the commercial invoice or materials safety data sheet, you can use a
+        'multipart/form-data' request body type instead
+      responses:
+        "201":
+          description: item created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderResponse"
+        "400":
+          description: invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StandardError"
+        "429":
+          description: rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitError"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Order"
+
+  /orders/{id}/waybills:
+    post:
+      tags:
+        - order
+      summary: 'Order - Waybills'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: id of an existing order
+      operationId: generateWaybill
+      description:
+        This will generate a waybill for the specified order
+      responses:
+        '200':
+          description: generates a waybill for specified order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '400':
+          description: 'invalid input, object invalid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardError'
+
+  /quotes:
+    post:
+      tags:
+        - Quote
+      summary: 'Quote'
+      operationId: createQuote
+      description: >
+        Create a quote on the system, which will then have several estimates
+        associated to it on which an order can be placed.
+
+        <br>
+        <br>
+        These are called estimates the final costs will be determined when the underlying provider measures
+        the packages and provides a final official billable weight.
+      responses:
+        '201':
+          description: item created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteResponse'
+        '400':
+          description: 'invalid input, object invalid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuoteRequest'
+        description: Inventory item to add
 
 components:
   schemas:
+    AccountingDimension:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        description:
+          type: string
+          example: Additional Charges
 
     ApiUserRequest:
       type: object
@@ -274,112 +499,112 @@ components:
           example: false
 
     ApiUserResponse:
-        type: object
-        properties:
-          id:
-            type: integer
-            example: 1234
-          email:
-            type: string
-            example: "test@company.com"
-          admin:
-            type: boolean
-            example: false
-          company_id:
-            type: integer
-            example: 1234
-          company_name:
-            type: string
-            example: "Test Company PTY Ltd"
-          role:
-            type: string
-            example: "client"
-          contact_number:
-            type: string
-            example: "123-456-7890"
-          first_name:
-            type: string
-            example: "Joe"
-          last_name:
-            type: string
-            example: "Soap"
-          whats_new_viewed_datetime:
-            type: string
-            example: "2020-01-01T00:00:00.000Z"
-          company_currency_id:
-            type: string
-            example: "USD"
-          deactivated:
-            type: boolean
-            example: false
-          reseller:
-            type: object
-            properties:
-              id:
-                type: integer
-                example: 2
-              name:
-                type: string
-                example: "Reseller PTY Ltd"
-              website_configuration:
-                type: object
-                properties:
-                  primary_colors:
-                    type: string
-                    example: "#000000"
-              base_markup:
-                type: number
-                example: 0.0
-              billing_company_id:
-                type: integer
-                example: 1
-              own_billing_company_id:
-                type: integer
-                example: 2
-              ui_url:
-                type: string
-                example: https://testship.company.com/
-              processing_fee_percentage:
-                type: number
-                example: 0.0
-              profit_sharing_percentage:
-                type: number
-                example: 0.0
-              sender_email:
-                type: string
-                example: "reply@company.com"
-              no_reply_email:
-                type: string
-                example:  "no_reply@company.com"
-              email_sender_name:
-                type: string
-                example: "Joe Soap"
-              account_status:
-                type: string
-                example: "active_account"
-              internal_name:
-                type: string
-                example: "Internal Test Company Name"
-              invoice_email:
-                type: string
-                example: "invoices@company.com"
-              currency_id:
-                type: string
-                example: "USD"
-              reseller_estimate_calculation:
-                type: string
-                example: "calculate_off_cost_price_estimate"
-              billing_config:
-                type: string
-                example: "reseller_billing"
-              flat_commission_percentage:
-                type: number
-                example: 0.0
-              minimum_company_markup:
-                type: number
-                example: 0.0
-              beta_ui_url:
-                type: string
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1234
+        email:
+          type: string
+          example: "test@company.com"
+        admin:
+          type: boolean
+          example: false
+        company_id:
+          type: integer
+          example: 1234
+        company_name:
+          type: string
+          example: "Test Company PTY Ltd"
+        role:
+          type: string
+          example: "client"
+        contact_number:
+          type: string
+          example: "123-456-7890"
+        first_name:
+          type: string
+          example: "Joe"
+        last_name:
+          type: string
+          example: "Soap"
+        whats_new_viewed_datetime:
+          type: string
+          example: "2020-01-01T00:00:00.000Z"
+        company_currency_id:
+          type: string
+          example: "USD"
+        deactivated:
+          type: boolean
+          example: false
+        reseller:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 2
+            name:
+              type: string
+              example: "Reseller PTY Ltd"
+            website_configuration:
+              type: object
+              properties:
+                primary_colors:
+                  type: string
+                  example: "#000000"
+            base_markup:
+              type: number
+              example: 0.0
+            billing_company_id:
+              type: integer
+              example: 1
+            own_billing_company_id:
+              type: integer
+              example: 2
+            ui_url:
+              type: string
+              example: https://testship.company.com/
+            processing_fee_percentage:
+              type: number
+              example: 0.0
+            profit_sharing_percentage:
+              type: number
+              example: 0.0
+            sender_email:
+              type: string
+              example: "reply@company.com"
+            no_reply_email:
+              type: string
+              example: "no_reply@company.com"
+            email_sender_name:
+              type: string
+              example: "Joe Soap"
+            account_status:
+              type: string
+              example: "active_account"
+            internal_name:
+              type: string
+              example: "Internal Test Company Name"
+            invoice_email:
+              type: string
+              example: "invoices@company.com"
+            currency_id:
+              type: string
+              example: "USD"
+            reseller_estimate_calculation:
+              type: string
+              example: "calculate_off_cost_price_estimate"
+            billing_config:
+              type: string
+              example: "reseller_billing"
+            flat_commission_percentage:
+              type: number
+              example: 0.0
+            minimum_company_markup:
+              type: number
+              example: 0.0
+            beta_ui_url:
+              type: string
 
     Address:
       type: object
@@ -402,6 +627,51 @@ components:
         country_code:
           type: string
           example: "ZA"
+
+    BaseError:
+      type: object
+      properties:
+        error:
+          type: string
+
+    BankDetail:
+      properties:
+        id:
+          type: integer
+          example: 123
+        description_1:
+          type: string
+          example: "Company"
+        description_2:
+          type: string
+          example: "Bank"
+        description_3:
+          type: string
+          example: "Routing Number"
+        description_4:
+          type: string
+          example: "Accounting Number"
+        description_5:
+          type: string
+          example: " "
+        value_1:
+          type: string
+          example: "Test Company PTY Ltd"
+        value_2:
+          type: string
+          example: "Bank of Test"
+        value_3:
+          type: string
+          example: "1234567890"
+        value_4:
+          type: string
+          example: "123456879"
+        value_5:
+          type: string
+          example: " "
+        currency_id:
+          type: string
+          example: "USD"
 
     BillingGroup:
       type: object
@@ -428,9 +698,9 @@ components:
           type: integer
           example: 3
         reseller_receivable_billing_company:
-          $ref: '#/components/schemas/ResellerReceivableBillingCompany'
+          $ref: "#/components/schemas/ResellerReceivableBillingCompany"
         reseller_payable_billing_company:
-          $ref: '#/components/schemas/ResellerPayableBillingCompany'
+          $ref: "#/components/schemas/ResellerPayableBillingCompany"
 
     BillingGroups:
       type: object
@@ -438,135 +708,82 @@ components:
         billing_groups:
           type: array
           items:
-            $ref: '#/components/schemas/BillingGroup'
+            $ref: "#/components/schemas/BillingGroup"
 
-    ResellerReceivableBillingCompany:
+    BrokerAddress:
       type: object
+      required:
+        - vat_number
+        - import_code
+        - address_1
+        - city
+        - province
+        - postal_code
+        - country_id
+        - email
+        - phone
       properties:
-        id:
-          type: integer
-          example: 123
         name:
           type: string
-          example: "Test Company PTY Ltd"
-        internal_name:
+          example: My House
+        company:
           type: string
-          example: "Internal Test Company Name"
-        registration_number:
-          type: string
-          example: "ZA2021/100000/01"
-        vat_number:
-          type: string
-          example: " - "
+          example: Company Name
         address_1:
           type: string
-          example: "Address line 1"
+          example: 5 Open Street
         address_2:
           type: string
-          example: "Address line 2"
-        country:
+          example: Melrose Arch
+        city:
           type: string
-          example: "South Africa"
-        number:
+          example: Johannesburg
+        province:
           type: string
-          example: "+271233456789"
+          example: Gauteng
+        postal_code:
+          type: string
+          example: "1610"
+        country_id:
+          type: integer
+          example: 226
         email:
           type: string
-          example: "test@company.com"
-        invoice_note:
+          example: example@stream.com
+        phone:
           type: string
-        billing_detail_currency:
-          type: string
-          example: "ZAR"
-        bank_detail_id:
-          type: integer
-          example: 1
-        xero_account_id:
-          type: integer
-          example: 2
-        xero_contactable:
-          type: boolean
-          example: true
-        reseller_id:
-          type: integer
-          example: 123
-
-    ResellerPayableBillingCompany:
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 123
-        name:
-          type: string
-          example: "Test Company PTY Ltd"
-        internal_name:
-          type: string
-          example: "Internal Test Company Name"
-        registration_number:
-          type: string
-          example: "ZA2021/100000/01"
+          example: "+27825547358"
         vat_number:
           type: string
-          example: " - "
-        address_1:
+          example: "BF4887450"
+        import_code:
           type: string
-          example: "Address line 1"
-        address_2:
-          type: string
-          example: "Address line 2"
-        country:
-          type: string
-          example: "South Africa"
-        number:
-          type: string
-          example: "+271233456789"
-        email:
-          type: string
-          example: "test@company.com"
-        invoice_note:
-          type: string
-        billing_detail_currency:
-          type: string
-          example: "ZAR"
-        bank_detail_id:
-          type: integer
-          example: 1
-        xero_account_id:
-          type: integer
-          example: 2
-        xero_contactable:
-          type: boolean
-          example: true
-        reseller_id:
-          type: integer
-          example: 123
+          example: "S1A485"
 
-    MarkupConfigRequest:
+    ClearanceDetails:
       type: object
+      required:
+        - reason_for_shipment_id
+        - invoice_number
+        - purchase_order_number
+        - commercial_invoice_placeholder_text
       properties:
-        markup_percentage:
-          type: number
-          example: 0.00
-
-    MarkupConfigResponse:
-      type: object
-      properties:
-        id:
+        reason_for_shipment_id:
           type: integer
-          example: 123
-        company_id:
-          type: integer
-          example: 123
-        markup_percentage:
-          type: number
-          example: 0.00
-        created_at:
-            type: string
-            example: '2021-06-29T10:54:03.789Z'
-        updated_at:
-            type: string
-            example: '2021-06-29T10:54:03.789Z'
+          enum: [0, 1, 2]
+          example: 0
+        invoice_number:
+          type: string
+          maxLength: 35
+          example: REF0001
+        purchase_order_number:
+          type: string
+          maxLength: 34
+          example: This is a purchase order number
+        commercial_invoice_placeholder_text:
+          type: string
+          maxLength: 34
+          example: This is commercial invoice placeholder text
 
     CompanyRequest:
       type: object
@@ -593,7 +810,7 @@ components:
           type: integer
           example: 1
         address:
-          $ref: '#/components/schemas/Address'
+          $ref: "#/components/schemas/Address"
         incoterms:
           type: array
           description: An array of incoterms
@@ -603,9 +820,9 @@ components:
         api_users:
           type: array
           items:
-            $ref: '#/components/schemas/ApiUserRequest'
+            $ref: "#/components/schemas/ApiUserRequest"
         markup_config:
-          $ref: '#/components/schemas/MarkupConfigRequest'
+          $ref: "#/components/schemas/MarkupConfigRequest"
 
     CompanyResponse:
       type: object
@@ -689,10 +906,10 @@ components:
           example: 0
         client_agreement_document_link:
           type: string
-          example: ' '
+          example: " "
         credit_application_link:
           type: string
-          example: ' '
+          example: " "
         credit_limit:
           type: integer
           example: 0
@@ -799,10 +1016,10 @@ components:
               example: 123
             created_at:
               type: string
-              example: '2021-06-29T10:54:03.789Z'
+              example: "2021-06-29T10:54:03.789Z"
             updated_at:
               type: string
-              example: '2021-06-29T10:54:03.789Z'
+              example: "2021-06-29T10:54:03.789Z"
             billing_group:
               type: object
               properties:
@@ -828,77 +1045,782 @@ components:
                   type: integer
                   example: 3
                 reseller_receivable_billing_company:
-                    allOf:
-                      - $ref: '#/components/schemas/ResellerReceivableBillingCompany'
-                      - type: object
-                        properties:
-                          bank_detail:
-                            $ref: '#/components/schemas/BankDetail'
+                  allOf:
+                    - $ref: "#/components/schemas/ResellerReceivableBillingCompany"
+                    - type: object
+                      properties:
+                        bank_detail:
+                          $ref: "#/components/schemas/BankDetail"
                 reseller_payable_billing_company:
-                    allOf:
-                      - $ref: '#/components/schemas/ResellerPayableBillingCompany'
-                      - type: object
-                        properties:
-                          bank_detail:
-                            $ref: '#/components/schemas/BankDetail'
+                  allOf:
+                    - $ref: "#/components/schemas/ResellerPayableBillingCompany"
+                    - type: object
+                      properties:
+                        bank_detail:
+                          $ref: "#/components/schemas/BankDetail"
         markup_config:
-          $ref: '#/components/schemas/MarkupConfigResponse'
+          $ref: "#/components/schemas/MarkupConfigResponse"
 
-    BankDetail:
+    Country:
+      type: object
       properties:
         id:
           type: integer
-          example: 123
-        description_1:
+          example: 1
+        name:
           type: string
-          example: "Company"
-        description_2:
+          example: Serbia
+        iso_code_2:
           type: string
-          example: "Bank"
-        description_3:
-          type: string
-          example: "Routing Number"
-        description_4:
-          type: string
-          example: "Accounting Number"
-        description_5:
-          type: string
-          example: " "
-        value_1:
-          type: string
-          example: "Test Company PTY Ltd"
-        value_2:
-          type: string
-          example: "Bank of Test"
-        value_3:
-          type: string
-          example: "1234567890"
-        value_4:
-          type: string
-          example: "123456879"
-        value_5:
-          type: string
-          example: " "
-        currency_id:
-          type: string
-          example: "USD"
+          example: RS
 
-    BaseError:
+    Currency:
       type: object
       properties:
-        error:
+        id:
           type: string
+          example: GBP
+        name:
+          type: string
+          example: Pound
+
+    DestinationAddress:
+      type: object
+      required:
+        - name
+        - address_1
+        - city
+        - province
+        - postal_code
+        - country_id
+        - email
+        - phone
+      properties:
+        name:
+          type: string
+          example: My House
+        company:
+          type: string
+          example: Company Name
+        address_1:
+          type: string
+          example: Abbey Road
+        address_2:
+          type: string
+          example: Putney
+        city:
+          type: string
+          example: London
+        province:
+          type: string
+          example: London
+        postal_code:
+          type: string
+          example: SW1A 2AA
+        import_code:
+          type: string
+          example: 'GB000000000000'
+        country_id:
+          type: integer
+          example: 70
+        email:
+          type: string
+          example: example@stream.com
+        phone:
+          type: string
+          example: '+27825547358'
+        classification:
+          type: string
+          enum: ['residential', 'business']
+          example: 'residential'
+
+    Estimate:
+      type: object
+      properties:
+        shipping_company:
+          type: string
+          example: FedEx USA
+        shipping_service:
+          type: string
+          example: Express Priority
+        estimate_id:
+          type: integer
+          example: 55788
+        quote_expired:
+          type: boolean
+          example: false
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItem'
+        transit_detail:
+          type: object
+          properties:
+            min_transit_time:
+              type: integer
+              format: in terms of Days, i.e 1 Day
+              example: 1
+            max_transit_time:
+              type: integer
+              format: in terms of Days, i.e 5 Day
+              example: 5
+            transit_time_note:
+              type: string
+              example: clearance delay possible
+        billable_weight:
+          type: object
+          properties:
+            metric:
+              type: object
+              properties:
+                packages:
+                  type: integer
+                  example: '2,'
+                mass_unit:
+                  type: string
+                  example: kg
+                distance_unit:
+                  type: string
+                  example: cm
+                volumetric_weight:
+                  type: number
+                  example: 50
+                weight:
+                  type: number
+                  example: 100
+                billable_weight:
+                  type: number
+                  example: 100
+            imperial:
+              type: object
+              properties:
+                packages:
+                  type: integer
+                  example: 2
+                mass_unit:
+                  type: string
+                  example: lb
+                distance_unit:
+                  type: string
+                  example: inches
+                volumetric_weight:
+                  type: number
+                  example: 110.231
+                weight:
+                  type: number
+                  example: 220.462
+                billable_weight:
+                  type: number
+                  example: 220.462
+
+    ExportPermitOriginCountryId:
+      type: integer
+      example: 254
 
     ExtendedError:
       allOf:
-        - $ref: '#/components/schemas/BaseError'
+        - $ref: "#/components/schemas/BaseError"
         - type: object
           properties:
             success:
               type: boolean
 
-  responses:
+    HsCode:
+      type: object
+      required:
+        - code
+        - cost
+        - description
+        - quantity
+        - weight
+        - country_id
+      properties:
+        code:
+          type: string
+          example: 100322
+        cost:
+          type: string
+          example: 100
+        description:
+          type: string
+          example: networking equipment
+        quantity:
+          type: integer
+          example: 5
+        weight:
+          type: number
+          example: 1.1
+        eccn:
+          type: string
+          format: 5 digit number
+          example: 12345
+        country_id:
+          type: integer
+          format: (country of origin of goods)
+          example: 5
 
+    ImporterOfRecordAddress:
+      type: object
+      required:
+        - vat_number
+        - import_code
+        - address_1
+        - city
+        - province
+        - postal_code
+        - country_id
+        - email
+        - phone
+      properties:
+        name:
+          type: string
+          example: My House
+        company:
+          type: string
+          example: Company Name
+        address_1:
+          type: string
+          example: 5 Open Street
+        address_2:
+          type: string
+          example: Melrose Arch
+        city:
+          type: string
+          example: Johannesburg
+        province:
+          type: string
+          example: Gauteng
+        postal_code:
+          type: string
+          example: '1610'
+        country_id:
+          type: integer
+          example: 226
+        email:
+          type: string
+          example: example@stream.com
+        phone:
+          type: string
+          example: '+27825547358'
+        vat_number:
+          type: string
+          example: 'BF4887450'
+        import_code:
+          type: string
+          example: 'S1A485'
+
+    LineItem:
+      type: object
+      properties:
+        description:
+          type: string
+          example: Fuel Surcharge
+        cost:
+          type: number
+          example: 469.95
+        invoice_section:
+          type: string
+          example: Express Rate Fees
+        currency_id:
+          type: string
+          example: USD
+
+    LineItemType:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        description:
+          type: string
+          example: Shipment Protection Fee
+        accounting_dimension:
+          type: object
+          items: null
+          $ref: '#/components/schemas/AccountingDimension'
+
+    MarkupConfigRequest:
+      type: object
+      properties:
+        markup_percentage:
+          type: number
+          example: 0.00
+
+    MarkupConfigResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        company_id:
+          type: integer
+          example: 123
+        markup_percentage:
+          type: number
+          example: 0.00
+        created_at:
+          type: string
+          example: "2021-06-29T10:54:03.789Z"
+        updated_at:
+          type: string
+          example: "2021-06-29T10:54:03.789Z"
+
+    Order:
+      type: object
+      properties:
+        order:
+          $ref: '#/components/schemas/OrderRequest'
+
+    OrderRequest:
+      type: object
+      required:
+        - origin_address
+        - destination_address
+        - pickup_instructions
+        - purpose_of_shipment_id
+        - quote_estimate_id
+        - customer_reference
+        - description_of_contents
+      properties:
+        api_user_id:
+          type: integer
+          example: "123"
+        origin_address:
+            $ref: '#/components/schemas/OriginAddress'
+        destination_address:
+            $ref: '#/components/schemas/DestinationAddress'
+        pickup_instructions:
+          type: string
+          example: Additional pickup information
+        purpose_of_shipment_id:
+          type: integer
+          example: 8
+        quote_estimate_id:
+          type: integer
+          example: 5
+        customer_reference:
+          type: string
+          example: Ref0000
+        description_of_contents:
+          type: string
+          example: Networking Equipment
+        hs_codes:
+          type: array
+          items:
+            $ref: '#/components/schemas/HsCode'
+          example:
+            - code: 100322
+              cost: 100
+              description: networking equipment
+              quantity: 5
+              weight: 1.1
+              eccn: 12345
+              country_id: 5
+        broker_address:
+          $ref: '#/components/schemas/BrokerAddress'
+        importer_of_record_address:
+          $ref: '#/components/schemas/ImporterOfRecordAddress'
+        clearance_details:
+          $ref: "#/components/schemas/ClearanceDetails"
+
+    OrderResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        purpose_of_shipment_id:
+          type: integer
+          example: 8
+        pickup_date:
+          type: string
+          example: "20-01-2020"
+        status:
+          type: string
+          example: "order_received"
+        waybill:
+          type: string
+          example: "123456789"
+        tracking_link:
+          type: string
+          example: "wwww.streamfiles.com/order123/tracking"
+        reference_number:
+          type: string
+          example: "Stream0014"
+        customer_reference:
+          type: string
+          example: "Ref0000"
+        measured_weight:
+          type: integer
+          example: 230.00
+        description_of_contents:
+          type: string
+          example: "Networking Equipment"
+        date_delivered:
+          type: string
+          example: "22-02-2020"
+        internal_transaction_number:
+          type: string
+          example: "235688794235684"
+        quote_id:
+          type: integer
+          example: 1
+        commercial_invoice_link:
+          type: string
+          example: "wwww.streamfiles.com/order123/commercial_invoice"
+        packaging_list_link:
+          type: string
+          example: "wwww.streamfiles.com/order123/packaging_list"
+        waybill_document_link:
+          type: string
+          example: "wwww.streamfiles.com/order123/waybill_document"
+        customs_clearance_document_link:
+          type: string
+          example: "wwww.streamfiles.com/order123/customs_clearance_document"
+        materials_safety_data_sheet_link:
+          type: string
+          example: "wwww.streamfiles.com/order123/materials_safety_data_sheet"
+        battery_declaration_link:
+          type: string
+          example: "wwww.streamfiles.com/order123/battery_declaration"
+        invoice_document_link:
+          type: string
+          example: "wwww.streamfiles.com/order123/invoice_document"
+        proof_of_delivery_link:
+          type: string
+          example: "wwww.streamfiles.com/order123/proof_of_delivery"
+        draft_bill_of_lading_link:
+          type: string
+          example: "wwww.streamfiles.com/order123/draft_bill_of_lading"
+        final_bill_of_lading_link:
+          type: string
+          example: "wwww.streamfiles.com/order123/final_bill_of_lading"
+        shippers_letter_of_instruction_link:
+          type: string
+          example: "wwww.streamfiles.com/order123/shippers_letter_of_instruction"
+        eei_request_document_link:
+          type: string
+          example: "wwww.streamfiles.com/order123/eei_request_document"
+        export_permit_link:
+          type: string
+          example: "wwww.streamfiles.com/order123/export_permit"
+        invoice_number:
+          type: string
+          example: "123456"
+        eei_eligible:
+          type: boolean
+          example: true
+        ccd_status:
+          type: string
+          example: "not_required"
+        origin_address:
+          type: object
+          items:
+            $ref: "#/components/schemas/OriginAddress"
+        destination_address:
+            $ref: "#/components/schemas/DestinationAddress"
+        broker_address:
+            $ref: "#/components/schemas/BrokerAddress"
+        importer_of_record_address:
+            $ref: "#/components/schemas/ImporterOfRecordAddress"
+        assigned_admin:
+          type: string
+          example: "admin@vatitstream.com"
+        invoice_data:
+            $ref: "#/components/schemas/Estimate"
+
+    OrderStatus:
+      type: object
+      required:
+        - id
+        - description
+        - value
+      properties:
+        id:
+          type: number
+          example: 1
+        description:
+          type: string
+          example: In Transit
+        value:
+          type: string
+          example: in_transit
+
+    OriginAddress:
+      type: object
+      required:
+        - name
+        - address_1
+        - city
+        - province
+        - postal_code
+        - country_id
+        - email
+        - phone
+      properties:
+        name:
+          type: string
+          example: My House
+        company:
+          type: string
+          example: Company Name
+        address_1:
+          type: string
+          example: 5 Open Street
+        address_2:
+          type: string
+          example: Melrose Arch
+        city:
+          type: string
+          example: Johannesburg
+        province:
+          type: string
+          example: Gauteng
+        postal_code:
+          type: string
+          example: '2196'
+        country_id:
+          type: integer
+          example: 226
+        export_code:
+          type: string
+          example: 'ZA000000000000'
+        email:
+          type: string
+          example: example@stream.com
+        phone:
+          type: string
+          example: '+27825547358'
+
+    Package:
+      type: object
+      required:
+        - weight
+        - width
+        - height
+        - length
+      properties:
+        weight:
+          type: number
+          example: 5.5
+        width:
+          type: number
+          example: 5.5
+        height:
+          type: number
+          example: 5.5
+        length:
+          type: number
+          example: 5.5
+
+    PurposeOfShipment:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        description:
+          type: string
+          example: Cost Insurance & Freight
+        code:
+          type: string
+          example: CIF
+
+
+    QuoteRequest:
+      type: object
+      required:
+        - api_user_id
+        - origin_country_id
+        - destination_country_id
+        - is_document
+        - is_stackable
+        - is_liftgate_required
+        - purpose_of_shipment_id
+        - is_shipment_protection_required
+        - value_of_goods
+        - value_of_goods_currency_id
+        - mass_unit
+        - distance_unit
+        - packages
+      properties:
+        api_user_id:
+          type: integer
+          example: 51
+        origin_address:
+          $ref: '#/components/schemas/OriginAddress'
+        destination_address:
+          $ref: '#/components/schemas/DestinationAddress'
+        value_of_goods:
+          type: string
+          format: Money
+          example: '600.00'
+        value_of_goods_currency_id:
+          type: string
+          format: 3 Digit Currency Code
+          example: ZAR
+        purpose_of_shipment_id:
+          type: integer
+          example: 8
+        is_document:
+          type: boolean
+          example: true
+        is_stackable:
+          type: boolean
+          example: true
+        is_liftgate_required:
+          type: boolean
+          example: true
+        is_shipment_protection_required:
+          type: boolean
+          example: true
+        distance_unit:
+          type: string
+          format: cm/in
+          example: cm
+        mass_unit:
+          type: string
+          format: kg/lb
+          example: kg
+        packages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Package'
+
+    QuoteResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        estimates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Estimate'
+
+    RateLimitError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: "Too many requests (20/20 in 60 seconds)"
+
+    ResellerPayableBillingCompany:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        name:
+          type: string
+          example: "Test Company PTY Ltd"
+        internal_name:
+          type: string
+          example: "Internal Test Company Name"
+        registration_number:
+          type: string
+          example: "ZA2021/100000/01"
+        vat_number:
+          type: string
+          example: " - "
+        address_1:
+          type: string
+          example: "Address line 1"
+        address_2:
+          type: string
+          example: "Address line 2"
+        country:
+          type: string
+          example: "South Africa"
+        number:
+          type: string
+          example: "+271233456789"
+        email:
+          type: string
+          example: "test@company.com"
+        invoice_note:
+          type: string
+        billing_detail_currency:
+          type: string
+          example: "ZAR"
+        bank_detail_id:
+          type: integer
+          example: 1
+        xero_account_id:
+          type: integer
+          example: 2
+        xero_contactable:
+          type: boolean
+          example: true
+        reseller_id:
+          type: integer
+          example: 123
+
+    ResellerReceivableBillingCompany:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        name:
+          type: string
+          example: "Test Company PTY Ltd"
+        internal_name:
+          type: string
+          example: "Internal Test Company Name"
+        registration_number:
+          type: string
+          example: "ZA2021/100000/01"
+        vat_number:
+          type: string
+          example: " - "
+        address_1:
+          type: string
+          example: "Address line 1"
+        address_2:
+          type: string
+          example: "Address line 2"
+        country:
+          type: string
+          example: "South Africa"
+        number:
+          type: string
+          example: "+271233456789"
+        email:
+          type: string
+          example: "test@company.com"
+        invoice_note:
+          type: string
+        billing_detail_currency:
+          type: string
+          example: "ZAR"
+        bank_detail_id:
+          type: integer
+          example: 1
+        xero_account_id:
+          type: integer
+          example: 2
+        xero_contactable:
+          type: boolean
+          example: true
+        reseller_id:
+          type: integer
+          example: 123
+
+    StandardError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: "Invalid field"
+
+  responses:
     GetAddress:
       description: Created
       content:
@@ -1005,7 +1927,7 @@ components:
           schema:
             properties:
               user:
-                $ref: '#/components/schemas/ApiUserResponse'
+                $ref: "#/components/schemas/ApiUserResponse"
 
     GetApiUsers:
       description: OK
@@ -1016,14 +1938,14 @@ components:
               api_users:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ApiUserResponse'
+                  $ref: "#/components/schemas/ApiUserResponse"
 
     GetBillingGroups:
       description: OK
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/BillingGroups'
+            $ref: "#/components/schemas/BillingGroups"
 
     GetCompany:
       description: OK
@@ -1032,7 +1954,7 @@ components:
           schema:
             properties:
               company:
-                $ref: '#/components/schemas/CompanyResponse'
+                $ref: "#/components/schemas/CompanyResponse"
 
     GetCompanies:
       description: OK
@@ -1043,16 +1965,16 @@ components:
               companies:
                 type: array
                 items:
-                  $ref: '#/components/schemas/CompanyResponse'
+                  $ref: "#/components/schemas/CompanyResponse"
 
     CreateCompany:
       description: Created
       content:
         application/json:
           schema:
-              properties:
-                company:
-                  $ref: '#/components/schemas/CompanyResponse'
+            properties:
+              company:
+                $ref: "#/components/schemas/CompanyResponse"
 
     CreateApiUser:
       description: Created
@@ -1060,7 +1982,7 @@ components:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/ApiUserResponse'
+              - $ref: "#/components/schemas/ApiUserResponse"
 
     DeleteApiUser:
       description: OK
@@ -1077,16 +1999,16 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/BaseError'
+            $ref: "#/components/schemas/BaseError"
           example:
-            error:  "You need to sign in or sign up before continuing"
+            error: "You need to sign in or sign up before continuing"
 
     CompanyNotFound:
       description: The specified company could not be found
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/BaseError'
+            $ref: "#/components/schemas/BaseError"
           example:
             error: "Couldn't find Company with 'id'= 111"
 
@@ -1095,7 +2017,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/BaseError'
+            $ref: "#/components/schemas/BaseError"
           example:
             error: "The page you requested does not exist"
 
@@ -1104,7 +2026,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/BaseError'
+            $ref: "#/components/schemas/BaseError"
           example:
             error: "Couldn't find ApiUser with 'id'= 2277"
 
@@ -1113,17 +2035,33 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ExtendedError'
+            $ref: "#/components/schemas/ExtendedError"
           example:
             success: false
             error: \"name":[\"has already been taken\"]
+
+    GetCountries:
+      description: fetch all the 'country' items
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Country"
+
+    OrderResponse:
+      description: response body after successfully creating/retrieving an order
+      content:
+        application/json:
+          schema:
+           $ref: "#/components/schemas/OrderResponse"
 
   requestBodies:
     ApiUser:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ApiUserRequest'
+            $ref: "#/components/schemas/ApiUserRequest"
       description: ApiUser Object
       required: true
 
@@ -1131,7 +2069,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Address'
+            $ref: "#/components/schemas/Address"
       description: Address object
       required: true
 
@@ -1141,20 +2079,20 @@ components:
           schema:
             properties:
               company:
-                $ref: '#/components/schemas/CompanyRequest'
+                $ref: "#/components/schemas/CompanyRequest"
       description: Company Object
       required: true
 
   securitySchemes:
-      OAuth:
-        type: oauth2
-        description: This API uses OAuth 2 with the client credentials flow.
-        flows:
-          clientCredentials:
-            tokenUrl: https://stream-orders-api-sandbox.herokuapp.com/oauth/token
-            scopes:
-              public: Public scope
+    OAuth:
+      type: oauth2
+      description: This API uses OAuth 2 with the client credentials flow.
+      flows:
+        clientCredentials:
+          tokenUrl: http://localhost:4000/oauth/token
+          scopes:
+            public: Public scope
 
 security:
-        - OAuth:
-          - public
+  - OAuth:
+      - public
