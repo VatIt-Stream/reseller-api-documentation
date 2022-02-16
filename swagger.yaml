@@ -274,7 +274,16 @@ paths:
               - false
       responses:
         "200":
-          $ref: "#/components/responses/GetCountries"
+          description: fetch all the 'country' items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  countries: 
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Country"
 
   /currencies:
     get:
@@ -287,9 +296,12 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Currency'
+                type: object
+                properties:
+                  currencies:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Currency'
 
   /line_item_types:
     get:
@@ -302,9 +314,12 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/LineItemType'
+                type: object
+                properties:
+                  line_item_types:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LineItemType'
 
   /order_statuses:
     get:
@@ -317,9 +332,12 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/OrderStatus"
+                type: object
+                properties:
+                  order_statuses:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OrderStatus'
 
   /purpose_of_shipments:
     get:
@@ -332,9 +350,12 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PurposeOfShipment'
+                type: object
+                properties:
+                  purpose_of_shipments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PurposeOfShipment'
 
   /system_configs/export_permit_origin_country_ids:
     get:
@@ -451,15 +472,15 @@ paths:
 
 components:
   schemas:
-  AccountingDimension:
-    type: object
-    properties:
-      id:
-        type: integer
-        example: 1
-      description:
-        type: string
-        example: Additional Charges
+    AccountingDimension:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        description:
+          type: string
+          example: Additional Charges
 
     ApiUserRequest:
       type: object
@@ -1063,7 +1084,6 @@ components:
           type: string
           example: Pound
 
-
     DestinationAddress:
       type: object
       required:
@@ -1319,7 +1339,6 @@ components:
           items: null
           $ref: '#/components/schemas/AccountingDimension'
 
-
     MarkupConfigRequest:
       type: object
       properties:
@@ -1510,7 +1529,7 @@ components:
         invoice_data:
             $ref: "#/components/schemas/Estimate"
 
-      OrderStatus:
+    OrderStatus:
       type: object
       required:
         - id
@@ -1526,7 +1545,6 @@ components:
         value:
           type: string
           example: in_transit
-
 
     OriginAddress:
       type: object
