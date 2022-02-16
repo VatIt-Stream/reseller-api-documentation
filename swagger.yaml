@@ -2,7 +2,7 @@ openapi: 3.0.0
 
 info:
   description: "This API provides basic accessibility to some of Stream's system. The documentation below outlines the authentication process as well as various endpoints that you will have access to as a client of the API."
-  version: "2.0.0"
+  version: "1.0.0"
   title: Stream Partner API
   termsOfService: "https://vatit-stream.com/terms_and_conditions"
   contact:
@@ -147,16 +147,6 @@ paths:
           $ref: "#/components/responses/CompanyNotFound"
 
   /api_users:
-    get:
-      tags:
-        - user
-      summary: Retrieve all users
-      responses:
-        '200':
-          $ref: '#/components/responses/GetApiUsers'
-        '401':
-          $ref: '#/components/responses/UnauthorizedAccess'
-
     post:
       tags:
         - user
@@ -286,6 +276,81 @@ paths:
         "200":
           $ref: "#/components/responses/GetCountries"
 
+  /currencies:
+    get:
+      summary: Currencies
+      tags:
+        - static
+      responses:
+        '200':
+          description: fetch all the 'currency' items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Currency'
+
+  /line_item_types:
+    get:
+      summary: Line Item Types
+      tags:
+        - static
+      responses:
+        '200':
+          description: fetch all the 'line item types' items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LineItemType'
+
+  /order_statuses:
+    get:
+      summary: Order statuses
+      tags:
+        - static
+      responses:
+        "200":
+          description: fetch all the different statuses an order may be in
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OrderStatus"
+
+  /purpose_of_shipments:
+    get:
+      summary: Purpose of Shipment (or IncoTerms)
+      tags:
+        - static
+      responses:
+        '200':
+          description: fetch all the 'purpose_of_shipment' items. Also known as the IncoTerms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PurposeOfShipment'
+
+  /system_configs/export_permit_origin_country_ids:
+    get:
+      summary: Export Permit Origin Country Ids
+      tags:
+        - static
+      responses:
+        '200':
+          description: This will fetch ids (as returned by the /countries endpoint) of all the countries that require an export permit. Export permits are required for orders leaving the specified countries before it is possible to generate waybill.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExportPermitOriginCountryId'
+              
   /orders:
     post:
       tags:
@@ -383,25 +448,6 @@ paths:
             schema:
               $ref: '#/components/schemas/QuoteRequest'
         description: Inventory item to add
-
-  /resellers/{id}/api_users:
-    get:
-      tags:
-        - user
-      summary: Retrieve users for a specific reseller
-      parameters:
-        - name: id
-          in: path
-          description: id of an existing reseller
-          required: true
-          schema:
-            type: integer
-            example: 1234
-      responses:
-        '200':
-          $ref: '#/components/responses/GetApiUsers'
-        '401':
-          $ref: '#/components/responses/UnauthorizedAccess'
 
 components:
   schemas:
