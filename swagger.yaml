@@ -17,7 +17,7 @@ servers:
     url: https://stream-orders-api-sandbox.herokuapp.com/reseller_api/v1/
   - description: Localhost
     url: http://localhost:4000/reseller_api/v1/
-    
+
 tags:
   - name: address
     description: Addresses are stored separately to entities such as companies. Each company has an address.
@@ -359,7 +359,7 @@ paths:
       description: >
         Create a quote on the system, which will then have several estimates
         associated to it on which an order can be placed.
-    
+
         <br>
         <br>
         These are called estimates the final costs will be determined when the underlying provider measures
@@ -405,6 +405,16 @@ paths:
 
 components:
   schemas:
+  AccountingDimension:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      description:
+        type: string
+        example: Additional Charges
+
     ApiUserRequest:
       type: object
       properties:
@@ -632,7 +642,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/BillingGroup"
-    
+
     BrokerAddress:
       type: object
       required:
@@ -706,7 +716,7 @@ components:
         commercial_invoice_placeholder_text:
           type: string
           maxLength: 34
-          example: This is commercial invoice placeholder text 
+          example: This is commercial invoice placeholder text
 
     CompanyRequest:
       type: object
@@ -996,7 +1006,18 @@ components:
         iso_code_2:
           type: string
           example: RS
-    
+
+    Currency:
+      type: object
+      properties:
+        id:
+          type: string
+          example: GBP
+        name:
+          type: string
+          example: Pound
+
+
     DestinationAddress:
       type: object
       required:
@@ -1125,7 +1146,7 @@ components:
                 billable_weight:
                   type: number
                   example: 220.462
-    
+
     ExtendedError:
       allOf:
         - $ref: "#/components/schemas/BaseError"
@@ -1217,7 +1238,7 @@ components:
         import_code:
           type: string
           example: 'S1A485'
-    
+
     LineItem:
       type: object
       properties:
@@ -1233,6 +1254,21 @@ components:
         currency_id:
           type: string
           example: USD
+
+    LineItemType:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        description:
+          type: string
+          example: Shipment Protection Fee
+        accounting_dimension:
+          type: object
+          items: null
+          $ref: '#/components/schemas/AccountingDimension'
+
 
     MarkupConfigRequest:
       type: object
@@ -1318,7 +1354,7 @@ components:
         clearance_details:
           $ref: "#/components/schemas/ClearanceDetails"
 
-    OrderResponse: 
+    OrderResponse:
       type: object
       properties:
         id:
@@ -1423,6 +1459,24 @@ components:
           example: "admin@vatitstream.com"
         invoice_data:
             $ref: "#/components/schemas/Estimate"
+
+      OrderStatus:
+      type: object
+      required:
+        - id
+        - description
+        - value
+      properties:
+        id:
+          type: number
+          example: 1
+        description:
+          type: string
+          example: In Transit
+        value:
+          type: string
+          example: in_transit
+
 
     OriginAddress:
       type: object
