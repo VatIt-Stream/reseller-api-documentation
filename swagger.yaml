@@ -13,8 +13,10 @@ info:
 
 servers:
   # Added by API Auto Mocking Plugin
-  - description: Stream Reseller API
+  - description: Stream Reseller Staging API
     url: https://stream-orders-api-sandbox.herokuapp.com/reseller_api/v1/
+  - description: Stream Reseller Production API
+    url: https://orders-production.vatit-stream.com/reseller_api/v1/
 
 tags:
   - name: address
@@ -278,7 +280,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  countries: 
+                  countries:
                     type: array
                     items:
                       $ref: "#/components/schemas/Country"
