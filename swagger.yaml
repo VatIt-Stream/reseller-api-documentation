@@ -2150,7 +2150,7 @@ components:
       description: This API uses OAuth 2 with the client credentials flow.
       flows:
         clientCredentials:
-          tokenUrl: oauth/token
+          tokenUrl: /oauth/token
           scopes:
             public: Public scope
 
