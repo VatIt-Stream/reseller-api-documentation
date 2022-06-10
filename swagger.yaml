@@ -407,6 +407,76 @@ paths:
             schema:
               $ref: "#/components/schemas/Order"
 
+    get:
+      tags:
+        - order
+      summary: Get Orders
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum:
+              - order_received
+              - additional_document_required
+              - awaiting_waybill_generation
+              - awaiting_prepayment
+              - prepayment_received
+              - client_to_schedule_pickup
+              - admin_to_schedule_pickup
+              - system_to_schedule_pickup
+              - awaiting_pickup
+              - awaiting_swap_out
+              - pickup_missed
+              - in_transit
+              - partially_delivered
+              - delivered
+              - invoicing_in_progress
+              - invoice_to_be_paid
+              - invoice_paid
+              - incomplete
+              - cancelled
+              - lost_in_transit
+          required: false
+          description: status of an existing order (none for all)
+        - in: query
+          name: page
+          schema:
+            type: number
+          description: "Page number (default 1)"
+      operationId: getOrders
+      description: |
+        This will return all orders (20 per page).
+        <br><br>`NOTE` <ul>
+          <li>When the order is finalized and an invoice has been issued the <b>invoice_data</b> field will be populated in the response. Prior to invoicing <b>invoice_data</b> will be blank.</li>
+          <li>The Vat & Duties will be a line item in the <b>invoice_data</b>, again this will only appear when the order is invoiced and the VAT & Duties are finalized and confirmed to be accurate.</li>
+          <li>All document fields ending with <b>_link</b> will have a temporary link to the file, each time a new GET request is made a new link will be generated with a new expiry.</li>
+        </ul>
+
+        `Downloading files (such as the customs clearance documents)`<ul>
+          <li>All documents for an order are available by performing a GET request to the URL of the document.</li>
+          <li>This URL is provided in the order parameters returned by this GET request and include the _link suffix.</li>
+          <li>All links expire within a short period after this initial GET request, if you experience a broken document link you will need to repeat this order GET request.</li>
+          <li>This order GET response does not include the actual file binary, but rather a link to the actual file. Following this link will yield the actual file.</li>
+          <li>An example response parameter for a link to a file is <b>customs_clearance_document_link</b>.</li>
+        </ul>
+      responses:
+        '200':
+          description: get existing orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderResponse'
+
+        '400':
+          description: 'invalid input, object invalid'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardError'
+
   /orders/{id}:
 
     get:
